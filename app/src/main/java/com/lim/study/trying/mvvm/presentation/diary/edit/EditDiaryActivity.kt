@@ -30,6 +30,7 @@ class EditDiaryActivity : AppCompatActivity() {
         binding.bindingString = "바인딩스트링"
         //binding.setVariable(BR.diary, diary) //바인딩 타입을 모를 때
         binding.diary = diary
+        binding.bindingInt = 5
 
         /* 뷰 바인딩을 쓰면 아래와 같이 하나씩 넣어줘야하는데
         binding.textDate.text = diary.createDate.toString()
