@@ -4,9 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <variable
+            name="bindingString"
+            type="String" />
 
         <variable
-            name="memo"
+            name="bindingInt"
+            type="Integer" />
+
+        <variable
+            name="diary"
             type="com.lim.study.trying.mvvm.domain.Diary" />
     </data>
 
@@ -21,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:text="@string/title"
+            android:text="@{bindingString}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -32,6 +39,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:ems="10"
+            android:text="@{diary.title}"
             android:inputType="textPersonName"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -41,7 +49,7 @@
             android:id="@+id/textDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/dateFormat"
+            app:createdDate="@{diary.createDate}"
             app:layout_constraintBottom_toTopOf="@+id/textTitle"
             app:layout_constraintEnd_toEndOf="@+id/textTitle" />
 
@@ -71,6 +79,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="24dp"
             android:ems="10"
+            android:text="@{diary.content}"
             android:gravity="start|top"
             android:inputType="textMultiLine"
             app:layout_constraintBottom_toTopOf="@+id/buttonSubmit"
