@@ -32,7 +32,7 @@ class DiariesAdapter(
     //뷰홀더를 만들기 위해서는 바인딩이 필요할 거고 , 바인딩을 만들기 위해서는 layoutInflater가 필요
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context) //from 안에 context가 필요. inflater는 context로 부터 가지고 올 수 있는데 context는 뷰에 항상 들어있음. parent에 뷰 있으니깐 parent에서 꺼내서 쓰면 됨(parent.context)
-        val binding = ItemDiaryBinding.inflate(layoutInflater)
+        val binding = ItemDiaryBinding.inflate(layoutInflater, parent, false)
         return ViewHolder(binding) //뷰홀더 리턴해야하므로
     }
 
