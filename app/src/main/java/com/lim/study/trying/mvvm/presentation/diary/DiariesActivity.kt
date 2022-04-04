@@ -1,11 +1,13 @@
 package com.lim.study.trying.mvvm.presentation.diary
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.lim.study.trying.mvvm.databinding.ActivityDiariesBinding
 import com.lim.study.trying.mvvm.domain.Diary
+import com.lim.study.trying.mvvm.presentation.diary.edit.EditDiaryActivity
 import java.util.*
 
 class DiariesActivity : AppCompatActivity() {
@@ -43,12 +45,20 @@ class DiariesActivity : AppCompatActivity() {
             //비동기가 다 끝나고 나서 호출하고 싶은 경우에는 중괄호 안에 쓰기
         }
         */
+
+        binding.buttonNewDiary.setOnClickListener{ deployEditDiaryActivity() }
     }
 
     //어댑터 생성하기 전에 다이어리를 눌렀을 때 동작하는 메소드
     private fun onDiaryClick(diary: Diary) { //다이어리를 인자로 받아서 Unit을 리턴하고 있는 것임
         Log.d("lim", "Diary : $diary")
         Toast.makeText(this, diary.toString(), Toast.LENGTH_LONG).show()
+        deployEditDiaryActivity()
+    }
+
+    private fun deployEditDiaryActivity(){
+        val intent = Intent(this, EditDiaryActivity::class.java)
+        startActivity(intent)
     }
 
     companion object {
