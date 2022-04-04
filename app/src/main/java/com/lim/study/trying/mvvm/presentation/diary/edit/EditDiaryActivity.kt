@@ -1,12 +1,11 @@
 package com.lim.study.trying.mvvm.presentation.diary.edit
 
+//  import com.lim.study.trying.mvvm.BR
 import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-//  import com.lim.study.trying.mvvm.BR
 import com.lim.study.trying.mvvm.databinding.ActivityEditDiaryBinding
-import com.lim.study.trying.mvvm.domain.Diary
-import java.util.*
 
 class EditDiaryActivity : AppCompatActivity() {
 
@@ -21,31 +20,30 @@ class EditDiaryActivity : AppCompatActivity() {
         //그래서 inflater 안에 parser가 들어있다
         setContentView(binding.root) //여기까지 데이터바인딩 쓸 준비됨
 
-        val diary = Diary(
-            id = 0,
-            title = "제목",
-            content = "내용",
-            createDate = Date(),
-        )
-        binding.bindingString = "바인딩스트링"
-        //binding.setVariable(BR.diary, diary) //바인딩 타입을 모를 때
-        binding.diary = diary
-        binding.bindingInt = 5
-
-        /* 뷰 바인딩을 쓰면 아래와 같이 하나씩 넣어줘야하는데
-        binding.textDate.text = diary.createDate.toString()
-        binding.textTitle.setText(diary.title)
-
-        데이터 바인딩을 쓰면 이걸 xml에 한번에 넣을 수 있다
-        */
-
         binding.buttonSubmit.setOnClickListener {
             setResult(Activity.RESULT_OK)
             finish()
         }
+
+        Log.d("lim", "Diary Id = ${getDiaryId()}")
+    }
+
+    /*
+    원래 이전에는 이 함수들을 썼는데 없어짐
+    override fun startActivityForResult(intent: Intent?, requestCode: Int) {
+        super.startActivityForResult(intent, requestCode)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+    */
+
+    private fun getDiaryId(): String? { //다이어리 id 안 넣고 보낼 수 있음
+        return intent.getStringExtra(KEY_DIARY_ID)
     }
 
     companion object {
-        const val KEY_DIARY = "KEY_DIARY"
+        const val KEY_DIARY_ID = "KEY_DIARY_ID" //상수로 외부에서 EditDiaryActivity.KEY_DIARY_ID로 접근 가능
     }
 }
