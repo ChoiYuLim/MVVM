@@ -2,8 +2,9 @@ package com.lim.study.trying.mvvm.presentation.diary
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.lim.study.trying.mvvm.databinding.ActivityDiariesBinding
 import com.lim.study.trying.mvvm.domain.Diary
@@ -16,11 +17,23 @@ class DiariesActivity : AppCompatActivity() {
 
     private lateinit var diariesAdapter: DiariesAdapter
 
+    private lateinit var editDiaryActivityLauncher: ActivityResultLauncher<Intent>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityDiariesBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        //런처는 onstarted, oncreate 두개만 가능 생명주기에 맞춰셔 해야함 onresume은 안됨
+        editDiaryActivityLauncher =
+            // registerForActivityResult( ) 이 안에 1.계약서를 넣어야함  2.콜백 (액티비티가 끝나고 다시 돌아왔을 때 뭐를 호출시킬거냐)
+            // 1.계약서 ->  ActivityResultContracts 안에 있음 -> 자주 사용하는 것들을 구현해놓은 구현체들이 존재하는 클래스
+            // 이거 하나로 권한 관련해서 깔끔하게 해결 가능 -> 이거 말리빈 블로그에 정리되어있는 거 찾아보기
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                // 2. 콜백을 람다로 집어넣기 -> 띄운 액티비티에서 setTResult를 통해서 resultok 또는 resultcancel을 받아 -> 이 결과가 콜백으로부터 들어옴 -> ActivityResult라는 객체로 부터 튀어나옴 -> 그걸 it으로 접근 가능
+                Toast.makeText(this, "result code: ${it.resultCode}", Toast.LENGTH_LONG).show()
+            } // editDiaryActivityLauncher로부터 띄운 액티비티가 종료되면 실행되는 콜백이 이 안에 들어있다
 
         //DiariesAdapter() 여기 안에 람다를 넣으면된다, 무슨 일이 일어날거냐
         diariesAdapter = DiariesAdapter {
@@ -57,7 +70,7 @@ class DiariesActivity : AppCompatActivity() {
     private fun deployEditDiaryActivity(diary: Diary? = null){
         val intent = Intent(this, EditDiaryActivity::class.java)
         intent.putExtra(EditDiaryActivity.KEY_DIARY_ID, diary?.id) //diary가 null이면 .id 까지도 안 오고 바로 null로 치환해줌
-        startActivity(intent)
+        editDiaryActivityLauncher.launch(intent)
     }
 
     companion object {
