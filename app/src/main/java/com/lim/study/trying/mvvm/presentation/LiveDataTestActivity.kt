@@ -8,7 +8,7 @@ class LiveDataTestActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLiveDataTestBinding
 
-    private val liveDataTest = LiveDataTest()
+    private val liveDataTest = LiveDataViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

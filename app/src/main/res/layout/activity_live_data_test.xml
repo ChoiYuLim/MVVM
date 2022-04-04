@@ -3,7 +3,7 @@
     <data>
         <variable
             name="liveDataTest"
-            type="com.lim.study.trying.mvvm.presentation.LiveDataTest" />
+            type="com.lim.study.trying.mvvm.presentation.LiveDataViewModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"

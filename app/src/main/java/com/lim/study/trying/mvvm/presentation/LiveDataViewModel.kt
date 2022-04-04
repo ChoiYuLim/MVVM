@@ -2,13 +2,15 @@ package com.lim.study.trying.mvvm.presentation
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 
 /*
 *   라이브 데이터가 변경될 뿐 액티비티에 있는 코드를 조작한 적이 없음
 *   뷰모델이 바뀌었을 때만 알려주기만 함 observe를 통해서 뷰가 뷰모델 바뀐 것만 알 수 있음
+*   뷰모델은 구독 가능한 형태를 가지고 있고 상태를 모델로부터 갖고 와서 상태 변경
 */
 
-class LiveDataTest {
+class LiveDataViewModel: ViewModel() {
 //  val readWriteLiveData = MutableLiveData<String>()
 //  val readOnlyLiveData: LiveData<String>
 
