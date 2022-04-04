@@ -16,6 +16,7 @@ class LiveDataTestActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityLiveDataTestBinding.inflate(layoutInflater)
+        this.binding = binding
         binding.liveDataViewModel = liveDataViewModel
         binding.lifecycleOwner = this   // 라이프사이클 오너는 액티비티가 갖고 있기 떄문에 this
 
