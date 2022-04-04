@@ -1,12 +1,11 @@
 package com.lim.study.trying.mvvm.presentation.diary.edit
 
+//  import com.lim.study.trying.mvvm.BR
 import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-//  import com.lim.study.trying.mvvm.BR
 import com.lim.study.trying.mvvm.databinding.ActivityEditDiaryBinding
-import com.lim.study.trying.mvvm.domain.Diary
-import java.util.*
 
 class EditDiaryActivity : AppCompatActivity() {
 
@@ -25,5 +24,26 @@ class EditDiaryActivity : AppCompatActivity() {
             setResult(Activity.RESULT_OK)
             finish()
         }
+
+        Log.d("lim", "Diary Id = ${getDiaryId()}")
+    }
+
+    /*
+    원래 이전에는 이 함수들을 썼는데 없어짐
+    override fun startActivityForResult(intent: Intent?, requestCode: Int) {
+        super.startActivityForResult(intent, requestCode)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+    */
+
+    private fun getDiaryId(): String? { //다이어리 id 안 넣고 보낼 수 있음
+        return intent.getStringExtra(KEY_DIARY_ID)
+    }
+
+    companion object {
+        const val KEY_DIARY_ID = "KEY_DIARY_ID" //상수로 외부에서 EditDiaryActivity.KEY_DIARY_ID로 접근 가능
     }
 }

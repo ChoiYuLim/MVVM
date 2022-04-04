@@ -51,23 +51,22 @@ class DiariesActivity : AppCompatActivity() {
 
     //어댑터 생성하기 전에 다이어리를 눌렀을 때 동작하는 메소드
     private fun onDiaryClick(diary: Diary) { //다이어리를 인자로 받아서 Unit을 리턴하고 있는 것임
-        Log.d("lim", "Diary : $diary")
-        Toast.makeText(this, diary.toString(), Toast.LENGTH_LONG).show()
-        deployEditDiaryActivity()
+        deployEditDiaryActivity(diary)
     }
 
-    private fun deployEditDiaryActivity(){
+    private fun deployEditDiaryActivity(diary: Diary? = null){
         val intent = Intent(this, EditDiaryActivity::class.java)
+        intent.putExtra(EditDiaryActivity.KEY_DIARY_ID, diary?.id) //diary가 null이면 .id 까지도 안 오고 바로 null로 치환해줌
         startActivity(intent)
     }
 
     companion object {
         private val STUB_DIARY = listOf(
-            Diary(0, "title1", "content", Date()),
-            Diary(1, "title2", "content", Date()),
-            Diary(2, "title3", "content", Date()),
-            Diary(3, "title4", "content", Date()),
-            Diary(4, "title5", "content", Date()),
+            Diary("0", "title1", "content", Date()),
+            Diary("1", "title2", "content", Date()),
+            Diary("2", "title3", "content", Date()),
+            Diary("3", "title4", "content", Date()),
+            Diary("4", "title5", "content", Date()),
         )
     }
 }
