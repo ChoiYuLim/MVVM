@@ -6,11 +6,15 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.lim.study.trying.mvvm.data.DiaryMemory
 import com.lim.study.trying.mvvm.databinding.ActivityDiariesBinding
 import com.lim.study.trying.mvvm.domain.Diary
 import com.lim.study.trying.mvvm.presentation.diary.edit.EditDiaryActivity
+
+/*  뷰에서 메모리에 접근해서 직접 데이터를 갖고 오는 것 다 없앰
+    뷰는 뷰의 일만 하게!
+ */
 
 class DiariesActivity : AppCompatActivity() {
 
@@ -19,6 +23,8 @@ class DiariesActivity : AppCompatActivity() {
     private lateinit var diariesAdapter: DiariesAdapter
 
     private lateinit var editDiaryActivityLauncher: ActivityResultLauncher<Intent>
+
+    private val diariesViewModel: DiariesViewModel by viewModels()  //  실제로 죽었는지 아닌지 viewModels()가 알아서 새 viewModel을 줄건지, 기존의 viewModel을 줄건지 판단
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,13 +70,17 @@ class DiariesActivity : AppCompatActivity() {
         }
         */
 
+        diariesViewModel.diaries.observe(this){
+            //  람다에 리스트가 들어와 (일기 목록이 변할 때마다 일기장 목록 전체 리스트가 들어옴)
+            diariesAdapter.submitList(it)
+        }
+
         binding.buttonNewDiary.setOnClickListener{ deployEditDiaryActivity() }
     }
 
     override fun onResume() {
         super.onResume()
-        diariesAdapter.submitList(DiaryMemory.getAllDiaries())  // 리스트 화면을 다시 돌아왔을 때 갱신된 다이어리 리스트를 보고싶으니깐 onResume()에 넣어주기
-                                                                // 이 리스트들은 다이어리메모리에서 가져오면 된다
+        diariesViewModel.loadDiaries()  // 리스트 화면 다시 돌아왔을 때, 전체 리스트 갱신 (뷰가 뷰모델에게 이벤트를 전달하는 것!)
     }
 
     //어댑터 생성하기 전에 다이어리를 눌렀을 때 동작하는 메소드
