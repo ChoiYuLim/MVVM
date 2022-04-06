@@ -1,15 +1,16 @@
 package com.lim.study.trying.mvvm.presentation.diary
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import com.lim.study.trying.mvvm.data.DiaryMemory
 import com.lim.study.trying.mvvm.databinding.ActivityDiariesBinding
 import com.lim.study.trying.mvvm.domain.Diary
 import com.lim.study.trying.mvvm.presentation.diary.edit.EditDiaryActivity
-import java.util.*
 
 class DiariesActivity : AppCompatActivity() {
 
@@ -32,7 +33,11 @@ class DiariesActivity : AppCompatActivity() {
             // 이거 하나로 권한 관련해서 깔끔하게 해결 가능 -> 이거 말리빈 블로그에 정리되어있는 거 찾아보기
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 // 2. 콜백을 람다로 집어넣기 -> 띄운 액티비티에서 setTResult를 통해서 resultok 또는 resultcancel을 받아 -> 이 결과가 콜백으로부터 들어옴 -> ActivityResult라는 객체로 부터 튀어나옴 -> 그걸 it으로 접근 가능
-                Toast.makeText(this, "result code: ${it.resultCode}", Toast.LENGTH_LONG).show()
+                when (it.resultCode) {
+                    Activity.RESULT_OK -> showToast("작성 완료!")
+                    Activity.RESULT_CANCELED -> showToast("작성 취소")
+                    else -> showToast("문제가 발생했습니다 : $it")
+                }
             } // editDiaryActivityLauncher로부터 띄운 액티비티가 종료되면 실행되는 콜백이 이 안에 들어있다
 
         //DiariesAdapter() 여기 안에 람다를 넣으면된다, 무슨 일이 일어날거냐
@@ -51,7 +56,7 @@ class DiariesActivity : AppCompatActivity() {
         //어댑터를 만들었으니 리싸이클러뷰에다가 세팅해줘야함
         binding.listDiaries.adapter = diariesAdapter
 
-        diariesAdapter.submitList(STUB_DIARY) //어댑터에 데이터 넘겨주기
+        //diariesAdapter.submitList(STUB_DIARY) //어댑터에 데이터 넘겨주기
 
         /*
         diariesAdapter.submitList(STUB_DIARY){
@@ -60,6 +65,12 @@ class DiariesActivity : AppCompatActivity() {
         */
 
         binding.buttonNewDiary.setOnClickListener{ deployEditDiaryActivity() }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        diariesAdapter.submitList(DiaryMemory.getAllDiaries())  // 리스트 화면을 다시 돌아왔을 때 갱신된 다이어리 리스트를 보고싶으니깐 onResume()에 넣어주기
+                                                                // 이 리스트들은 다이어리메모리에서 가져오면 된다
     }
 
     //어댑터 생성하기 전에 다이어리를 눌렀을 때 동작하는 메소드
@@ -73,13 +84,17 @@ class DiariesActivity : AppCompatActivity() {
         editDiaryActivityLauncher.launch(intent)
     }
 
-    companion object {
-        private val STUB_DIARY = listOf(
-            Diary("0", "title1", "content", Date()),
-            Diary("1", "title2", "content", Date()),
-            Diary("2", "title3", "content", Date()),
-            Diary("3", "title4", "content", Date()),
-            Diary("4", "title5", "content", Date()),
-        )
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
+
+//    companion object {
+//        private val STUB_DIARY = listOf(
+//            Diary("0", "title1", "content", Date()),
+//            Diary("1", "title2", "content", Date()),
+//            Diary("2", "title3", "content", Date()),
+//            Diary("3", "title4", "content", Date()),
+//            Diary("4", "title5", "content", Date()),
+//        )
+//    }
 }
