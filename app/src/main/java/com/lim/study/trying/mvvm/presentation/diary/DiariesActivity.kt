@@ -6,10 +6,10 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import com.lim.study.trying.mvvm.data.DiaryMemory
 import com.lim.study.trying.mvvm.databinding.ActivityDiariesBinding
 import com.lim.study.trying.mvvm.domain.Diary
 import com.lim.study.trying.mvvm.presentation.diary.edit.EditDiaryActivity
-import java.util.*
 
 class DiariesActivity : AppCompatActivity() {
 
@@ -51,7 +51,7 @@ class DiariesActivity : AppCompatActivity() {
         //어댑터를 만들었으니 리싸이클러뷰에다가 세팅해줘야함
         binding.listDiaries.adapter = diariesAdapter
 
-        diariesAdapter.submitList(STUB_DIARY) //어댑터에 데이터 넘겨주기
+        //diariesAdapter.submitList(STUB_DIARY) //어댑터에 데이터 넘겨주기
 
         /*
         diariesAdapter.submitList(STUB_DIARY){
@@ -60,6 +60,12 @@ class DiariesActivity : AppCompatActivity() {
         */
 
         binding.buttonNewDiary.setOnClickListener{ deployEditDiaryActivity() }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        diariesAdapter.submitList(DiaryMemory.getAllDiaries())  // 리스트 화면을 다시 돌아왔을 때 갱신된 다이어리 리스트를 보고싶으니깐 onResume()에 넣어주기
+                                                                // 이 리스트들은 다이어리메모리에서 가져오면 된다
     }
 
     //어댑터 생성하기 전에 다이어리를 눌렀을 때 동작하는 메소드
@@ -73,13 +79,13 @@ class DiariesActivity : AppCompatActivity() {
         editDiaryActivityLauncher.launch(intent)
     }
 
-    companion object {
-        private val STUB_DIARY = listOf(
-            Diary("0", "title1", "content", Date()),
-            Diary("1", "title2", "content", Date()),
-            Diary("2", "title3", "content", Date()),
-            Diary("3", "title4", "content", Date()),
-            Diary("4", "title5", "content", Date()),
-        )
-    }
+//    companion object {
+//        private val STUB_DIARY = listOf(
+//            Diary("0", "title1", "content", Date()),
+//            Diary("1", "title2", "content", Date()),
+//            Diary("2", "title3", "content", Date()),
+//            Diary("3", "title4", "content", Date()),
+//            Diary("4", "title5", "content", Date()),
+//        )
+//    }
 }
