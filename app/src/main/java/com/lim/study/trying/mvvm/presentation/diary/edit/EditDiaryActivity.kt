@@ -1,18 +1,17 @@
 package com.lim.study.trying.mvvm.presentation.diary.edit
 
-//  import com.lim.study.trying.mvvm.BR
 import android.app.Activity
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.lim.study.trying.mvvm.data.DiaryMemory
 import com.lim.study.trying.mvvm.databinding.ActivityEditDiaryBinding
-import com.lim.study.trying.mvvm.domain.Diary
-import java.util.*
 
 class EditDiaryActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityEditDiaryBinding
+
+    private val editDiaryViewModel: EditDiaryViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,17 +21,25 @@ class EditDiaryActivity : AppCompatActivity() {
         //inflate할 때 xml을 파싱함
         //그래서 inflater 안에 parser가 들어있다
         setContentView(binding.root) //여기까지 데이터바인딩 쓸 준비됨
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = this   // 이게 꼭 필요한건지??
 
-        loadDiary(getDiaryId())
+        editDiaryViewModel.loadDiary(getDiaryId())
 
         binding.buttonSubmit.setOnClickListener {
-            saveDiary()
+            editDiaryViewModel.saveDiary()
             setResult(Activity.RESULT_OK)
             finish()
         }
 
         Log.d("lim", "Diary Id = ${getDiaryId()}")
+
+        binding.viewModel = editDiaryViewModel
+
+        /*
+            editDiaryViewModel.title.observe(this){
+                Log.d("yulim", "edittext changed : $it")
+            }
+        */
     }
 
     /*
@@ -48,23 +55,6 @@ class EditDiaryActivity : AppCompatActivity() {
 
     private fun getDiaryId(): String? { //다이어리 id 안 넣고 보낼 수 있음
         return intent.getStringExtra(KEY_DIARY_ID)
-    }
-
-    private fun loadDiary(diaryId: String?){
-
-        val diary = DiaryMemory.getDiary(diaryId ?: return)
-        binding.diary = diary   // data binding
-
-    }
-
-    private fun saveDiary() {
-        val diary = Diary(
-            id = UUID.randomUUID().toString(),
-            title = binding.textTitle.text.toString(),
-            content = binding.textContent.text.toString(),
-            createDate = Date()
-        )
-        DiaryMemory.saveDiary(diary)
     }
 
     companion object {
