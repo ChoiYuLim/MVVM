@@ -1,9 +1,13 @@
 package com.lim.study.trying.mvvm.presentation
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.Observable
+import androidx.databinding.ObservableInt
 import com.lim.study.trying.mvvm.databinding.ActivityLiveDataTestBinding
+import java.util.*
 
 class LiveDataTestActivity : AppCompatActivity() {
 
@@ -31,5 +35,14 @@ class LiveDataTestActivity : AppCompatActivity() {
             Log.d("lim", "count = $it")
         }
 */
+
+        /* liveData는 라이프사이클이 합류되어있지만 Observable은 라이프사이클 합류되어있지 않아서 직접 꺼주고 켜주고 해야함 */
+        liveDataViewModel.count.addOnPropertyChangedCallback(object: Observable.OnPropertyChangedCallback(){    // 직접 인터페이스로 구현해줘야함, OnPropertyChangedCallback은 클래스라서 () 필요
+            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+                sender as ObservableInt // 캐스팅 해줘야 함
+                sender.get()    // count 가져옴
+                Log.d("lim", "count = $(sender.get())")
+            }
+        })
     }
 }
