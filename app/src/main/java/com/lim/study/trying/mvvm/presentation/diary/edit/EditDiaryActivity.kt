@@ -21,7 +21,7 @@ class EditDiaryActivity : AppCompatActivity() {
         //inflate할 때 xml을 파싱함
         //그래서 inflater 안에 parser가 들어있다
         setContentView(binding.root) //여기까지 데이터바인딩 쓸 준비됨
-        binding.lifecycleOwner = this   // 이게 꼭 필요한건지??
+        binding.lifecycleOwner = this   // 꼭 필요한거 맞음, 까먹기 쉬움! 주의
 
         editDiaryViewModel.loadDiary(getDiaryId())
 

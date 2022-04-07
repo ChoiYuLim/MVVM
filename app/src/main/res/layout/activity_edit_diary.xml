@@ -59,7 +59,7 @@
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/memoMaxLengthFormat"
+            android:text="@{@string/memoMaxLengthFormat(viewModel.content.length())}"
             app:layout_constraintBottom_toTopOf="@+id/textContent"
             app:layout_constraintEnd_toEndOf="@+id/textContent" />
 
