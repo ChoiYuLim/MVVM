@@ -6,7 +6,13 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.Observable
 import androidx.databinding.ObservableInt
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import com.lim.study.trying.mvvm.databinding.ActivityLiveDataTestBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import java.util.*
 
 class LiveDataTestActivity : AppCompatActivity() {
@@ -30,19 +36,31 @@ class LiveDataTestActivity : AppCompatActivity() {
         */
 
         setContentView(binding.root)
+
+        CoroutineScope(Dispatchers.IO).launch {
+            //STARTED 다음에서는 잘되는데 안보이게 됐을 때 실행 안하게 됨!
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                // collect는 코루틴 suspend method여서 반드시 couroutineScope 안에서 실행시켜줘야함
+                liveDataViewModel.stateFlow.collect {
+                    Log.d("yulim", "count: $it")
+                }
+            }
+        }
+
 /*
         liveDataTest.count.observe(this){
             Log.d("lim", "count = $it")
         }
 */
 
-        /* liveData는 라이프사이클이 합류되어있지만 Observable은 라이프사이클 합류되어있지 않아서 직접 꺼주고 켜주고 해야함 */
+        /* liveData는 라이프사이클이 합류되어있지만 Observable은 라이프사이클 합류되어있지 않아서 직접 꺼주고 켜주고 해야함
         liveDataViewModel.count.addOnPropertyChangedCallback(object: Observable.OnPropertyChangedCallback(){    // 직접 인터페이스로 구현해줘야함, OnPropertyChangedCallback은 클래스라서 () 필요
             override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
                 sender as ObservableInt // 캐스팅 해줘야 함
                 sender.get()    // count 가져옴
                 Log.d("lim", "count = $(sender.get())")
             }
-        })
+        }) */
+
     }
 }
