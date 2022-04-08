@@ -3,14 +3,18 @@ package com.lim.study.trying.mvvm.presentation.diary
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.lim.study.trying.mvvm.data.db.MVVMDiaryDatabase
+import com.lim.study.trying.mvvm.data.entity.DiaryEntity
 import com.lim.study.trying.mvvm.databinding.ActivityDiariesBinding
 import com.lim.study.trying.mvvm.domain.Diary
 import com.lim.study.trying.mvvm.presentation.diary.edit.EditDiaryActivity
+import java.util.*
 
 /*  뷰에서 메모리에 접근해서 직접 데이터를 갖고 오는 것 다 없앰
     뷰는 뷰의 일만 하게!
@@ -76,6 +80,12 @@ class DiariesActivity : AppCompatActivity() {
         }
 
         binding.buttonNewDiary.setOnClickListener{ deployEditDiaryActivity() }
+
+        /* 테스트 코드
+        val dao = MVVMDiaryDatabase.newInstance(this).getDariesDao()
+        Log.d("yulim", "diaries: ${dao.getAllDiaries()}")
+        dao.insertDiary(DiaryEntity("title", "content", Date()))
+        Log.d("yulim", "diaries: ${dao.getAllDiaries()}") */
     }
 
     override fun onResume() {
